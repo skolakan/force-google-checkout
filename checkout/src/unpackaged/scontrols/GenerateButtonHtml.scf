@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+    <script type="text/javascript" src="/js/functions.js"></script>
+    <script src="/soap/ajax/12.0/connection.js"></script>
+<style type="text/css">
+body, td {
+	color:#333333;
+	margin:0px;
+}
+body {
+	background-color:#EBEBE2;	
+	background-position:left top;
+	background-repeat:repeat-x;
+	font-family:'Arial','Helvetica',sans-serif;
+	font-size:75%;
+}
+</style>
+<script type="text/javascript">    
+
+var merchant_id = 'not_set'; // get the via ajax
+var useSandbox = 'sandbox';
+var query = "Select g.Use_Sandbox__c, g.Name, g.Merchant_Key__c, g.Merchant_ID__c,g.Last_Update_Run__c, g.Id  From Google_Merchant__c g limit 1";
+
+function init() { 
+	// grab the merchant ID for use in the text area below
+	var qr = sforce.connection.query(query);
+	var record = qr.getArray('records')[0];
+	merchant_id= record.Merchant_ID__c;
+	// TODO select sandbox or production depending on a flag in the merchant record
+	
+	buttonHTML.value = '<form action="https://'+useSandbox+'.google.com/checkout/cws/v2/Donations/'+merchant_id + '/checkoutForm" \n' + 
+		'	id="BB_BuyButtonForm" method="post" name="BB_BuyButtonForm" \n' + 
+		'	onSubmit="return validateAmount(this.item_price_1)">\n' + 
+		'	<h3>{!Campaign.Name}</h3>{!Campaign.Description}\n' +
+		'	<input name="item_name_1" type="hidden" value="{!Campaign.Name}"/>\n' +
+		'	<input name="item_description_1" type="hidden" \n'+
+		'		value="{!Campaign.Description}"/>\n' +
+		'	<input name="item_quantity_1" type="hidden" value="1"/>\n' +
+    	'	<input name="item_currency_1" type="hidden" value="USD"/>\n' +
+    	'	<input name="item_is_modifiable_1" type="hidden" value="true"/>\n' +
+    	'	<input name="item_min_price_1" type="hidden" value="2.0"/>\n' +
+    	'	<input name="item_max_price_1" type="hidden" value="25000.0"/>\n' +
+		'	<input name="_charset_" type="hidden" value="utf-8"/>\n' +
+    	'	<table cellpadding="5" cellspacing="0" width="1%">\n' +
+		'	<tr><td align="right" nowrap="nowrap" width="1%">&#x24; <input id="item_price_1" \n' +
+		'	 name="item_price_1" onfocus="this.style.color=&apos;black&apos;; this.value=&apos;&apos;;" size="6" type="text" value="50.00"/>\n' +
+		'	</td><td align="left" width="1%">\n' +
+		'	<input type="hidden" name="shopping-cart.items.item-1.merchant-item-id" value="{!Campaign.Id}" />\n' +
+		'	<input alt="Donate" src="https://'+useSandbox+'.google.com/checkout/buttons/donateNow.gif?merchant_id=' +
+        merchant_id +'&amp;w=115&amp;h=50&amp;style=white&amp;variant=text&amp;loc=en_US"\n' + 
+        '        type="image"/></td></tr>\n' +
+		'	</table>\n</form>\n' ;
+	}
+</script>
+</head>
+
+<body onload="init();"  >
+<table><tr><td>
+<!-- TODO this does not drop in the proper merchant id yet -->
+Script to validate amount entered:<br />
+<textarea id="buttonJS" rows="11" cols="68">
+<script type="text/javascript"> 
+function validateAmount(amount){
+	if(amount.value.match( /^[0-9]+(\.([0-9]+))?$/)){
+		return true;
+	}else{
+		alert('You must enter a valid donation.');
+		amount.focus();
+		return false;
+	}
+}
+</script>
+</textarea>
+</td><td rowspan="2">Select the text from these two windows, place both of these 
+snippets onto your web site page source.
+The merchant item id (Campaign ID) and should not be modified.  
+Other portions of the form can be modified by changing the values of the hidden or 
+visible fields, do not change the names. <P />
+You may need to adjust the value of one or more fields; for example the item_price_1 
+input field is set to $50.00 US.  In addition, item_name_1 and item_description_1 will appear on the 
+reciept that is sent to the donor, you may edit those values.
+<center>
+<form>
+<input value=" Done " class="btn" name="edit" onclick="window.close();" title="Close" type="button"> 
+</form></center>
+</td>
+</tr>
+<tr><td><p />
+Donation Button HTML for this campaign: {!Campaign.Name}<br />
+<textarea id="buttonHTML" rows="33" cols="68">
+</textarea>
+</td></tr></table>
+</body>
+</html>

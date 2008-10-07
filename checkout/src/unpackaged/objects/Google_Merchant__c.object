@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <fields>
+        <fullName>ContinueToken__c</fullName>
+        <label>Continue Token</label>
+        <length>128</length>
+        <type>Text</type>
+    </fields>
+    <fields>
+        <fullName>Has_More__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>set if this continue token has more data to query 
+unset when continue token says no more data available</description>
+        <label>Has More</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Last_Update_Run__c</fullName>
+        <description>when did we last run the get notification API</description>
+        <label>Last Update Run</label>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Merchant_Center__c</fullName>
+        <defaultValue>&apos;https://sandbox.google.com/checkout/&apos;</defaultValue>
+        <inlineHelpText>Visit the Merchant center on Google</inlineHelpText>
+        <label>Merchant Center</label>
+        <type>Url</type>
+    </fields>
+    <fields>
+        <fullName>Merchant_Email__c</fullName>
+        <label>Merchant Email</label>
+        <type>Email</type>
+    </fields>
+    <fields>
+        <fullName>Merchant_ID__c</fullName>
+        <label>Merchant ID</label>
+        <length>32</length>
+        <type>Text</type>
+    </fields>
+    <fields>
+        <fullName>Merchant_Key__c</fullName>
+        <label>Merchant Key</label>
+        <length>64</length>
+        <type>Text</type>
+    </fields>
+    <fields>
+        <fullName>Use_Sandbox__c</fullName>
+        <defaultValue>true</defaultValue>
+        <label>Use Sandbox</label>
+        <type>Checkbox</type>
+    </fields>
+    <label>Google Merchant</label>
+    <nameField>
+        <label>Google Merchant Name</label>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>Google Merchants</pluralLabel>
+    <sharingModel>ReadWrite</sharingModel>
+</CustomObject>
