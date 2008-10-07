@@ -1,0 +1,31 @@
+<apex:page  standardController="Google_Merchant__c" extensions="GoogTab" > 
+	<apex:form>	
+	<apex:outputPanel id="det"><apex:detail subject="{!Google_Merchant__c.id}" /></apex:outputPanel>
+		<apex:pageBlock title="Refreshing Orders"  >
+			<apex:pageBlockButtons location="top"  >
+				<apex:commandButton action="{!updateOrders30}" 
+					value="Update orders for previous 60 days" status="status" rerender="status"/>
+			</apex:pageBlockButtons>
+					
+		<apex:actionstatus id="status">
+			<apex:facet name="start">
+				<span style="color: red"; >
+				( contacting google checkout,please wait )</span>
+				</apex:facet>			
+			<apex:facet name="stop">
+			<apex:outputPanel  id="counter" >
+			{!lastRun}   {!totalOrders}
+			<!-- TODO show this working by logging the time stamps
+			<apex:dataTable value="{!updatesFromGoogle}" var="notice" rowClasses="odd,even" styleClass="list"> 
+			
+			</apex:dataTable>
+			 -->
+			 </apex:outputPanel>
+			</apex:facet>	
+		</apex:actionstatus>
+		
+		</apex:pageBlock>
+	<apex:actionPoller interval="10" action="{!updateOrders}"
+		rerender="counter,det,recentOrders" status="status" />
+	</apex:form>
+</apex:page>
